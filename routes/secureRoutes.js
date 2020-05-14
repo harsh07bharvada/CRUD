@@ -78,10 +78,7 @@ secureRouter.post('/project',async (req,res,next)=>{
 });
 
 
-
-
-
-//Create a project
+//Get all project
 secureRouter.get('/getProjects',async (req,res,next)=>{
 
     let result = {};
@@ -89,7 +86,7 @@ secureRouter.get('/getProjects',async (req,res,next)=>{
     const token = req.cookies.token;
     const {username} = await verifyToken(token);
     
-    Project.find({username:username},(projectErr,projects)=>{
+    Project.find({username},(projectErr,projects)=>{
 
         if(projectErr)
         {
@@ -108,6 +105,32 @@ secureRouter.get('/getProjects',async (req,res,next)=>{
     });
 });
 
+
+//Update a project
+secureRouter.put('/project',async (req,res,next)=>{
+
+    let result = {};
+    let statusCode = 200;
+    const {_id,name,description,status,link} = req.body;
+    Project.updateOne({_id},{name,description,status,link},(projectErr,writeOpResult)=>{
+
+        if(projectErr)
+        {
+            statusCode = 406;
+            result.status = statusCode;
+            result.error = projectErr;
+            res.status(result.status).send(result);
+        }
+        else
+        {
+            result.status = statusCode;
+            result.result = writeOpResult;
+            res.status(result.status).send(result);
+        }
+
+    });
+
+});
 
 
 
