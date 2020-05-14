@@ -1,6 +1,7 @@
 const express = require('express');
 const connectToMongoDBAtlas = require('./database/connection');
 const openRouter = require('./routes/openRoutes');
+const secureRouter = require('./routes/secureRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -20,5 +21,6 @@ app.use(bodyParser.urlencoded({
 
 
 app.use('/',openRouter);
+app.use('/',secureRouter);
 
 app.listen(3000,console.log('Server up and running!'));
