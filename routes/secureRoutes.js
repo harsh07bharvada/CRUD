@@ -3,12 +3,12 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const Project = require('../models/project');
 const {development :{jwtSecret}} = require('../config/config');
+const config = require('../config/config');
 const secureRouter = express.Router();
 
 //Middleware to check for token
 secureRouter.use(async(req,res,next)=>{
 
-    
     let result = {};
     let status = 401;
     const token = req.cookies.token;
@@ -30,7 +30,7 @@ secureRouter.use(async(req,res,next)=>{
             result.error = tokenErr;
             res.status(result.status).send(result);
         }
-        else 
+        else if(!config.getBlacklistTokens().includes(token))
         {
             User.findOne({username:username},function(findError,doc){
                 if(findError)
@@ -45,11 +45,20 @@ secureRouter.use(async(req,res,next)=>{
                 }
             });
         }
+        else
+        {
+            let err = new Error();
+            err.name = 'Unauthorized';
+            err.message = 'Blacklisted token used';
+            result.status = status;
+            result.error = err;
+            res.status(result.status).send(result);
+        }
     }
 });
 
 //Create a project
-secureRouter.post('/project',async (req,res,next)=>{
+secureRouter.post('/project',async (req,res)=>{
 
     let result = {};
     let statusCode = 201;
@@ -79,7 +88,7 @@ secureRouter.post('/project',async (req,res,next)=>{
 
 
 //Get all project
-secureRouter.get('/getProjects',async (req,res,next)=>{
+secureRouter.get('/getProjects',async (req,res)=>{
 
     let result = {};
     let statusCode = 200;
@@ -107,7 +116,7 @@ secureRouter.get('/getProjects',async (req,res,next)=>{
 
 
 //Update a project
-secureRouter.put('/project',async (req,res,next)=>{
+secureRouter.put('/project',async (req,res)=>{
 
     let result = {};
     let statusCode = 200;
@@ -116,7 +125,7 @@ secureRouter.put('/project',async (req,res,next)=>{
 
         if(projectErr)
         {
-            statusCode = 406;
+            statusCode = 404;
             result.status = statusCode;
             result.error = projectErr;
             res.status(result.status).send(result);
@@ -132,7 +141,42 @@ secureRouter.put('/project',async (req,res,next)=>{
 
 });
 
+//Delete a project
+secureRouter.delete('/project',async (req,res)=>{
 
+    let result = {};
+    let statusCode = 200;
+    const {_id} = req.body;
+    Project.deleteOne({_id},(projectErr)=>{
+
+        if(projectErr)
+        {
+            statusCode = 404;
+            result.status = statusCode;
+            result.error = projectErr;
+            res.status(result.status).send(result);
+        }
+        else
+        {
+            result.status = statusCode;
+            res.status(result.status).send(result);
+        }
+
+    });
+
+});
+
+
+//Sign out
+secureRouter.get('/signout',async (req,res)=>{
+
+    let statusCode = 200;
+    let result = {statusCode};
+    const {token} = req.cookies;
+    config.updateBlacklistTokens(token);
+    res.clearCookie('token').status(statusCode).send(result);
+
+});
 
 
 //Function to verify token
