@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const projectSchema = mongoose.Schema({
     username:{
         type:String,
-        required:true,
-        unique:true
+        required:true
     },
     name:{
         type:String,
@@ -19,7 +18,6 @@ const projectSchema = mongoose.Schema({
     status:{
         type:String,
         required:true,
-        unique:true
     },
     link:{
         type:String,

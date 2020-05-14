@@ -24,7 +24,6 @@ secureRouter.use(async(req,res,next)=>{
     else
     {
         const {tokenErr,username} = await verifyToken(token);
-        console.log(`Middleware tokenerr: ${tokenErr} and username : ${username}`);
         if(tokenErr)
         {
             result.status = status;
@@ -49,16 +48,15 @@ secureRouter.use(async(req,res,next)=>{
     }
 });
 
+//Create a project
 secureRouter.post('/project',async (req,res,next)=>{
 
     let result = {};
     let statusCode = 201;
     const {name,description,status,link} = req.body;
     const token = req.cookies.token;
-    const {err,username} = await verifyToken(token);
-    console.log(`username : ${username}`);
+    const {username} = await verifyToken(token);
     const project = new Project({username,name,description,status,link});
-    console.log(`project model : ${project}`);
     project.save((projectErr,savedProject)=>{
 
         if(projectErr)
@@ -79,6 +77,41 @@ secureRouter.post('/project',async (req,res,next)=>{
 
 });
 
+
+
+
+
+//Create a project
+secureRouter.get('/getProjects',async (req,res,next)=>{
+
+    let result = {};
+    let statusCode = 200;
+    const token = req.cookies.token;
+    const {username} = await verifyToken(token);
+    
+    Project.find({username:username},(projectErr,projects)=>{
+
+        if(projectErr)
+        {
+            statusCode = 406;
+            result.status = statusCode;
+            result.error = projectErr;
+            res.status(result.status).send(result);
+        }
+        else
+        {
+            result.status = statusCode;
+            result.result = projects;
+            res.status(result.status).send(result);
+        }
+
+    });
+});
+
+
+
+
+
 //Function to verify token
 const verifyToken = async (token) =>{
 
@@ -86,7 +119,6 @@ const verifyToken = async (token) =>{
     try{
         const decrypt = await jwt.verify(token, jwtSecret);
         const username = decrypt.username;
-        console.log(`Username retrieved from token : ${username}`);
         result.username = username;
         return result;
 
