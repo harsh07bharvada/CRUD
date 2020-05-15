@@ -38,6 +38,7 @@ openRouter.post('/signin',(req,res)=>{
     let status = 200; 
     const {username,password} = req.body;
     const signedUser = {username,password};
+    console.log(`username : ${username} password: ${password}`);
     User.findOne({username: username},function(err,doc){
 
         if(err)
@@ -49,6 +50,7 @@ openRouter.post('/signin',(req,res)=>{
         }
         else
         {
+            console.log(`doc : ${doc}`);
             bcrypt.compare(password,doc.password)
             .then(match=>{
                 if(match)
