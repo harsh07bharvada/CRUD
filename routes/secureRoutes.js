@@ -67,7 +67,7 @@ secureRouter.post('/project',async (req,res)=>{
     const {username} = await verifyToken(token);
     const project = new Project({username,name,description,status,link});
     res.set('Access-Control-Allow-Credentials', 'true');
-    res.set('Access-Control-Allow-Origin', req.get('origin'));
+    res.set('Access-Control-Allow-Origin', null);
     project.save((projectErr,savedProject)=>{
 
         if(projectErr)
