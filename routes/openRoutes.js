@@ -36,8 +36,9 @@ openRouter.post('/signin',(req,res)=>{
 
     let result = {};
     let status = 200; 
-    console.log('req.body');
+    console.log('request body');
     console.log(req.body);
+    res.status(result.status).send(result);
     const {username,password} = req.body;
     const signedUser = {username,password};
     try{
