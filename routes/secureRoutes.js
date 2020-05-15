@@ -14,8 +14,8 @@ secureRouter.use(async(req,res,next)=>{
     console.log('req headers');
     console.log(req.headers);
     const bearerToken = req.header('authorization');
-    console.log(bearer);
     const token = bearerToken.split(" ")[1];
+    console.log(token);
     if(!token)
     {
         let err = new Error();
@@ -72,7 +72,6 @@ secureRouter.post('/project',async (req,res)=>{
     console.log(`Token received : ${token}`);
     const {username} = await verifyToken(token);
     const project = new Project({username,name,description,status,link});
-    console.log(`Request origin : ${req.get('origin')}`);
     
     project.save((projectErr,savedProject)=>{
 
@@ -105,7 +104,6 @@ secureRouter.get('/getProjects',async (req,res)=>{
     const token = bearerToken.split(" ")[1];
     console.log(`Token received : ${token}`);
     const {username} = await verifyToken(token);
-    console.log(`Request origin : ${req.get('origin')}`);
     
     Project.find({username},(projectErr,projects)=>{
 
