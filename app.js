@@ -21,7 +21,14 @@ const corsOptions = {
   credentials: true
 }
 
-app.use(cors(corsOptions));    
+// app.use(cors(corsOptions)); 
+app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', req.get('origin'))
+  res.set('Access-Control-Allow-Credentials', 'true') // Add this!
+  
+
+  next()
+})   
 app.use(express.json({extended:false}));
 
 app.use(bodyParser.json({limit:'50mb'})); 
