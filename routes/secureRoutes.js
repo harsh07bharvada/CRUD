@@ -13,9 +13,9 @@ secureRouter.use(async(req,res,next)=>{
     let status = 401;
     console.log('req headers');
     console.log(req.headers);
-    const bearerToken = req.header('Authorization');
+    const bearerToken = req.header('authorization');
     console.log(bearer);
-    const token = bearerToken.split(" ")[0];
+    const token = bearerToken.split(" ")[1];
     if(!token)
     {
         let err = new Error();
@@ -67,8 +67,8 @@ secureRouter.post('/project',async (req,res)=>{
     let result = {};
     let statusCode = 201;
     const {name,description,status,link} = req.body;
-    const bearerToken = req.header('Authorization');
-    const token = bearerToken.split(" ")[0];
+    const bearerToken = req.header('authorization');
+    const token = bearerToken.split(" ")[1];
     console.log(`Token received : ${token}`);
     const {username} = await verifyToken(token);
     const project = new Project({username,name,description,status,link});
@@ -101,8 +101,8 @@ secureRouter.get('/getProjects',async (req,res)=>{
 
     let result = {};
     let statusCode = 200;
-    const bearerToken = req.header('Authorization');
-    const token = bearerToken.split(" ")[0];
+    const bearerToken = req.header('authorization');
+    const token = bearerToken.split(" ")[1];
     console.log(`Token received : ${token}`);
     const {username} = await verifyToken(token);
     console.log(`Request origin : ${req.get('origin')}`);
@@ -184,8 +184,8 @@ secureRouter.get('/signout',async (req,res)=>{
 
     let statusCode = 200;
     let result = {statusCode};
-    const bearerToken = req.header('Authorization');
-    const token = bearerToken.split(" ")[0];
+    const bearerToken = req.header('authorization');
+    const token = bearerToken.split(" ")[1];
     console.log(`Token received : ${token}`);
     config.updateBlacklistTokens(token);
     res.clearCookie('token').status(statusCode).send(result);

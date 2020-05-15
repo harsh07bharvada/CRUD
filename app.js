@@ -9,28 +9,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const whitelist = ['http://localhost:3000', 'https://sidie.now.sh/']
-const corsOptions = {
-  // origin: function(origin, callback) {
-  //   if (whitelist.indexOf(origin) !== -1) {
-  //     callback(null, true)
-  //   } else {
-  //     callback(new Error('Not allowed by CORS'))
-  //   }
-  // },
-  credentials: true
-}
-
  app.use(cors()); 
-// app.use((req, res, next) => {
-//   console.log('req headers');
-//   console.log(req.headers);
-//   res.set('Access-Control-Allow-Origin', req.get('origin'))
-//   res.set('Access-Control-Allow-Credentials', 'true')
-//   res.set('Access-Control-Allow-Headers', 'Authorization'); 
-
-//   next()
-// })   
+  
 app.use(express.json({extended:false}));
 
 app.use(bodyParser.json({limit:'50mb'})); 
