@@ -4,10 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harsh07bharvada/crud.git"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Harsh Bharvada",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^4.0.1",
