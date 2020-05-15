@@ -13,12 +13,15 @@ connectToMongoDBAtlas().catch(error=>{
     console.log('Error on mongo connection!');
 });
 
-app.use(bodyParser.json());
-app.use(cors());
+app.use(cors());    
+app.use(express.json({extended:false}));
+// for parsing application/json
+app.use(bodyParser.json({limit:'50mb'})); 
+// for parsing application/xwww-
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 1000000 })); 
+//form-urlencoded
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+
 
 app.get('/',(req,res)=> {
   res.sendFile(path.join(__dirname+'/public/index.html'));
