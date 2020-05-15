@@ -36,52 +36,63 @@ openRouter.post('/signin',(req,res)=>{
 
     let result = {};
     let status = 200; 
+    console.log('req.body');
+    console.log(req.body);
     const {username,password} = req.body;
     const signedUser = {username,password};
-    console.log(`username : ${req.body.username} password: ${req.body.password}`);
-    User.findOne({username: username},function(err,doc){
+    try{
+        User.findOne({username: username},function(err,doc){
 
-        if(err)
-        {
-            status = 404;
-            result.status = status;
-            result.error = err;
-            res.status(result.status).send(result);
-        }
-        else
-        {
-            console.log(`doc : ${doc}`);
-            bcrypt.compare(password,doc.password)
-            .then(match=>{
-                if(match)
-                {
-                    const expiration = '2d';
-                    const token = generateToken(username,expiration);
-                    result.status = status;
-                    result.token = token;
-                    result.result = signedUser;
-                    res.status(result.status).cookie('token', token, {
-                        expires: new Date(Date.now() + expiration),
-                        secure: false, // set to true if your using https
-                        httpOnly: true,
-                      }).send(result);
-                }
-                else
-                {
-                    status = 401;
-                    result.status = status;
-                    result.error = 'Authentication Error';
-                    res.status(result.status).send(result);
-                }
-            })
-            .catch(err=>{
-                status = 500;
+            if(err)
+            {
+                status = 404;
                 result.status = status;
                 result.error = err;
-                res.status(status).send(result);
-            });
-        }
-    });
+                res.status(result.status).send(result);
+            }
+            else
+            {
+                console.log(`doc : ${doc}`);
+                bcrypt.compare(password,doc.password)
+                .then(match=>{
+                    if(match)
+                    {
+                        const expiration = '2d';
+                        const token = generateToken(username,expiration);
+                        result.status = status;
+                        result.token = token;
+                        result.result = signedUser;
+                        res.status(result.status).cookie('token', token, {
+                            expires: new Date(Date.now() + expiration),
+                            secure: false, // set to true if your using https
+                            httpOnly: true,
+                          }).send(result);
+                    }
+                    else
+                    {
+                        status = 401;
+                        result.status = status;
+                        result.error = 'Authentication Error';
+                        res.status(result.status).send(result);
+                    }
+                })
+                .catch(err=>{
+                    status = 500;
+                    result.status = status;
+                    result.error = err;
+                    res.status(status).send(result);
+                });
+            }
+        });
+    }
+    catch(reqErr)
+    {
+        status = 401;
+        result.status = status;
+        result.error = reqErr
+        res.status(result.status).send(result);
+    }
+    
 });
 
 //Generate Token
