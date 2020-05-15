@@ -36,9 +36,6 @@ openRouter.post('/signin',(req,res)=>{
 
     let result = {};
     let status = 200; 
-    console.log('request body');
-    console.log(req.body);
-    res.status(status).send(result);
     const {username,password} = req.body;
     const signedUser = {username,password};
     try{
@@ -53,7 +50,7 @@ openRouter.post('/signin',(req,res)=>{
             }
             else
             {
-                console.log(`doc : ${doc}`);
+                
                 bcrypt.compare(password,doc.password)
                 .then(match=>{
                     if(match)
