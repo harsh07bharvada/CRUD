@@ -38,7 +38,7 @@ openRouter.post('/signin',(req,res)=>{
     let status = 200; 
     const {username,password} = req.body;
     const signedUser = {username,password};
-    console.log(`username : ${username} password: ${password}`);
+    console.log(`username : ${req.body.username} password: ${req.body.password}`);
     User.findOne({username: username},function(err,doc){
 
         if(err)
