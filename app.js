@@ -21,16 +21,16 @@ const corsOptions = {
   credentials: true
 }
 
-// app.use(cors(corsOptions)); 
-app.use((req, res, next) => {
-  console.log('req headers');
-  console.log(req.headers);
-  res.set('Access-Control-Allow-Origin', req.get('origin'))
-  res.set('Access-Control-Allow-Credentials', 'true')
-  res.set('Access-Control-Allow-Headers', 'Authorization'); 
+ app.use(cors()); 
+// app.use((req, res, next) => {
+//   console.log('req headers');
+//   console.log(req.headers);
+//   res.set('Access-Control-Allow-Origin', req.get('origin'))
+//   res.set('Access-Control-Allow-Credentials', 'true')
+//   res.set('Access-Control-Allow-Headers', 'Authorization'); 
 
-  next()
-})   
+//   next()
+// })   
 app.use(express.json({extended:false}));
 
 app.use(bodyParser.json({limit:'50mb'})); 
