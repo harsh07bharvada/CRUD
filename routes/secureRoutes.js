@@ -11,7 +11,10 @@ secureRouter.use(async(req,res,next)=>{
 
     let result = {};
     let status = 401;
+    console.log('req headers');
+    console.log(req.headers);
     const bearerToken = req.header('Authorization');
+    console.log(bearer);
     const token = bearerToken.split(" ")[0];
     if(!token)
     {
