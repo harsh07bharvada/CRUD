@@ -67,12 +67,13 @@ secureRouter.post('/project',async (req,res)=>{
     const {username} = await verifyToken(token);
     const project = new Project({username,name,description,status,link});
     console.log(`Request origin : ${req.get('origin')}`);
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Access-Control-Allow-Origin', req.get('origin'));
     project.save((projectErr,savedProject)=>{
 
         if(projectErr)
         {
-            res.set('Access-Control-Allow-Credentials', 'true');
-            res.set('Access-Control-Allow-Origin', req.get('origin'));
+            
             statusCode = 406;
             result.status = statusCode;
             result.error = projectErr;
@@ -80,8 +81,6 @@ secureRouter.post('/project',async (req,res)=>{
         }
         else
         {
-            res.set('Access-Control-Allow-Credentials', 'true');
-            res.set('Access-Control-Allow-Origin', req.get('origin'));
             result.status = statusCode;
             result.result = savedProject;
             res.status(result.status).send(result);
@@ -99,7 +98,8 @@ secureRouter.get('/getProjects',async (req,res)=>{
     let statusCode = 200;
     const token = req.cookies.token;
     const {username} = await verifyToken(token);
-    
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Access-Control-Allow-Origin', req.get('origin'));
     Project.find({username},(projectErr,projects)=>{
 
         if(projectErr)
