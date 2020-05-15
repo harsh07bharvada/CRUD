@@ -98,6 +98,7 @@ secureRouter.get('/getProjects',async (req,res)=>{
     let statusCode = 200;
     const token = req.cookies.token;
     const {username} = await verifyToken(token);
+    console.log(`Request origin : ${req.get('origin')}`);
     res.set('Access-Control-Allow-Credentials', 'true');
     res.set('Access-Control-Allow-Origin', req.get('origin'));
     Project.find({username},(projectErr,projects)=>{
