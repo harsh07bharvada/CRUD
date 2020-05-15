@@ -17,11 +17,10 @@ const corsOptions = {
     } else {
       callback(new Error('Not allowed by CORS'))
     }
-  },
-  credentials: true
+  }
 }
 
-app.use(cors(corsOptions));    
+app.use(cors({credentials: true}));    
 app.use(express.json({extended:false}));
 
 app.use(bodyParser.json({limit:'50mb'})); 
