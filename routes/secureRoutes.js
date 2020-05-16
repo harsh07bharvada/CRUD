@@ -16,7 +16,7 @@ secureRouter.use(async(req,res,next)=>{
     const bearerToken = req.header('authorization');
     const token = bearerToken.split(" ")[1];
     console.log(token);
-    if(token === null || token === undefined)
+    if(token == null || token == undefined)
     {
         let err = new Error();
         err.name = 'Unauthorized';
@@ -28,7 +28,7 @@ secureRouter.use(async(req,res,next)=>{
     else
     {
         const {tokenErr,username} = await verifyToken(token);
-        if(username === null || username === undefined)
+        if(username == null || username == undefined)
         {
             result.status = status;
             result.error = tokenErr;
