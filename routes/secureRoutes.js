@@ -16,7 +16,7 @@ secureRouter.use(async(req,res,next)=>{
     const bearerToken = req.header('authorization');
     const token = bearerToken.split(" ")[1];
     console.log(token);
-    if(!token)
+    if(token === null || token === undefined)
     {
         let err = new Error();
         err.name = 'Unauthorized';
@@ -28,7 +28,7 @@ secureRouter.use(async(req,res,next)=>{
     else
     {
         const {tokenErr,username} = await verifyToken(token);
-        if(tokenErr)
+        if(username === null || username === undefined)
         {
             result.status = status;
             result.error = tokenErr;
@@ -208,6 +208,7 @@ const verifyToken = async (token) =>{
         err.message = 'Token invalid!';
         console.log(`Error while verifying token. Invalid token`);
         result.err = err;
+        console.log(`@verifyToken - Object sending back : ${result}`);
         return result;
     }
 }
