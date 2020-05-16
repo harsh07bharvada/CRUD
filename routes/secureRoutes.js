@@ -11,12 +11,9 @@ secureRouter.use(async(req,res,next)=>{
 
     let result = {};
     let status = 401;
-    console.log('req headers');
-    console.log(req.headers);
     const bearerToken = req.header('authorization');
     const token = bearerToken.split(" ")[1];
-    console.log(token);
-    if(token == null || token == undefined)
+    if(token.indexOf(".") === -1)
     {
         let err = new Error();
         err.name = 'Unauthorized';
