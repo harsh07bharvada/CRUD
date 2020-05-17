@@ -114,6 +114,7 @@ secureRouter.get('/getProjects',async (req,res)=>{
         else
         {
             result.status = statusCode;
+            result.username = username;
             result.result = projects;
             res.status(result.status).send(result);
         }
