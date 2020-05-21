@@ -41,7 +41,7 @@ openRouter.post('/signin',(req,res)=>{
     try{
         User.findOne({username: username},function(err,doc){
 
-            if(err)
+            if(err || !doc)
             {
                 status = 404;
                 result.status = status;
